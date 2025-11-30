@@ -9,6 +9,7 @@ import { PlayScreen } from './PlayScreen';
 import { GameOverScreen } from './GameOverScreen';
 import { LobbyScreen } from './LobbyScreen';
 import './ColorGame.css';
+import { RuleDescription } from './RuleDescription';
 
 // ユーティリティ
 const getRandomElement = <T,>(arr: T[]): T => arr[Math.floor(Math.random() * arr.length)];
@@ -196,6 +197,7 @@ const ColorGame: React.FC = () => {
       <div className="game-container">
         <div className="card">
           <h2 className="title">待機中...</h2>
+		  <RuleDescription />
           <div className="bg-yellow" style={{textAlign: 'left'}}>
              <p>部屋番号: <strong>{roomId}</strong></p>
              <p>あなた: {myName}</p>
