@@ -7,26 +7,32 @@ export type ColorDefinition = {
   hex: string;
 };
 
-export interface Question {
-  text: ColorDefinition;
-  color: ColorDefinition;
-  type: QuestionType;
+// 新規：飲食店の情報
+export interface Shop {
+  id: string;
+  name: string;
+  url: string;
+  photoUrl: string;
+  genre: string;
 }
 
-// 通信対戦用の型定義
-export type PlayerRole = 'HOST' | 'GUEST';
+// RoomDataの変更：候補リストと勝者の選択IDを追加
+export interface RoomData {
+  status: 'WAITING' | 'PLAY' | 'FINISHED';
+  gameType: 'COLOR_MATCH'; // 今後ゲームが増えた時に使うためのタグ
+  players: {
+    [key: string]: Player;
+  };
+  shopCandidates: Shop[]; // 候補のリスト（全プレイヤー共通）
+  winnerSelectionId: string | null; // 勝者が選んだ店のID
+  startTime?: number; 
+}
 
+// Playerの変更：各プレイヤーが選んだ店のIDを保持
 export interface Player {
   name: string;
   score: number;
   combo: number;
-  alive: boolean; // ゲームオーバーになっていないか
-}
-
-export interface RoomData {
-  status: 'WAITING' | 'PLAY' | 'FINISHED';
-  players: {
-    [key: string]: Player; // "host" または "guest" というキーでプレイヤー情報を保存
-  };
-  startTime?: number; // ゲーム開始時刻（同期用）
+  alive: boolean;
+  selectedShopId: string | null; // プレイヤーが密かに選んだ店
 }
