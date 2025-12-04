@@ -8,7 +8,7 @@ export type ColorDefinition = {
   hex: string;
 };
 
-export interface Question { // ★このインターフェースが正しくexportされます
+export interface Question {
   text: ColorDefinition;
   color: ColorDefinition;
   type: QuestionType;
@@ -40,4 +40,4 @@ export interface RoomData {
   shopCandidates: Shop[];
   winnerSelectionId: string | null;
   startTime?: number; 
-}
+}　
