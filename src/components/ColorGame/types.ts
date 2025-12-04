@@ -14,7 +14,7 @@ export interface Question { // ★このインターフェースが正しくexpo
   type: QuestionType;
 }
 
-// --- 拡張した型 ---
+// 拡張した型
 export interface Shop {
   id: string;
   name: string;

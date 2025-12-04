@@ -14,7 +14,6 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   const req = request as any;
   const res = response as any;
   
-  // 1. 環境変数からAPIキーを取得
   const apiKey = process.env.HOTPEPPER_API_KEY;
   if (!apiKey) {
     return res.status(500).json({ error: 'API key not configured' });
@@ -49,7 +48,6 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
         return res.status(apiResponse.status).json({ error: 'Failed to fetch external API' });
     }
     
-    // 取得したJSONデータを明示的にShopResult型として扱う
     const data: ShopResult = await apiResponse.json() as ShopResult; 
     
     if (!data.results || !data.results.shop) {
