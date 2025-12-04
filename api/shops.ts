@@ -1,4 +1,4 @@
-// Vercel固有の型ではなく、Node.jsの標準的なRequest/Responseの型を使用します
+// Vercel固有の型ではなく、Node.jsの標準的なRequest/Responseの型を使用し、ローカルのエラーを回避
 import type { IncomingMessage, ServerResponse } from 'http'; 
 import fetch from 'node-fetch'; 
 
@@ -9,7 +9,6 @@ interface ShopResult {
   };
 }
 
-// Node.jsのRequest/Responseの型を Vercelの関数に適用
 export default async (request: IncomingMessage, response: ServerResponse) => {
   // TypeScriptの厳格な型チェックを避けるため、any型にキャスト
   const req = request as any;
@@ -50,7 +49,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
         return res.status(apiResponse.status).json({ error: 'Failed to fetch external API' });
     }
     
-    // 取得したJSONデータを明示的にShopResult型として扱う (unknown警告解消)
+    // 取得したJSONデータを明示的にShopResult型として扱う
     const data: ShopResult = await apiResponse.json() as ShopResult; 
     
     if (!data.results || !data.results.shop) {

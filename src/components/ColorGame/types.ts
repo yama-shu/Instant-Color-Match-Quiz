@@ -1,15 +1,14 @@
 export type GameState = 'LOBBY' | 'WAITING' | 'PLAY' | 'GAME_OVER';
 export type QuestionType = 'TEXT' | 'COLOR';
-export type PlayerRole = 'HOST' | 'GUEST'; // PlayerRoleもエクスポート
+export type PlayerRole = 'HOST' | 'GUEST';
 
-// --- 既存の型 ---
 export type ColorDefinition = {
   id: string;
   name: string;
   hex: string;
 };
 
-export interface Question { // Questionもエクスポート
+export interface Question { // ★このインターフェースが正しくexportされます
   text: ColorDefinition;
   color: ColorDefinition;
   type: QuestionType;
