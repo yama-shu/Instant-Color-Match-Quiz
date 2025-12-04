@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Search, MapPin } from 'lucide-react';
-import type { Shop } from './types';
+import type { Shop } from '../../../types';
 
 interface Props {
   onSelect: (shop: Shop) => void;

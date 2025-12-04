@@ -1,29 +1,27 @@
 import React, { useState } from 'react';
 import { Users, LogIn } from 'lucide-react';
-import { ShopSearch } from './ShopSearch'; // 新規追加
-import type { Shop } from './types'; // 型追加
 import './ColorGame.css';
 
 interface Props {
-  // お店(Shop)も渡せるように変更
-  onJoin: (name: string, roomId: string, role: 'HOST' | 'GUEST', shop: Shop | null) => void;
+  // お店は親から渡されるので、ここでの引数からは削除（または無視）でもOKですが
+  // わかりやすくシンプルにします
+  onJoin: (name: string, roomId: string, role: 'HOST' | 'GUEST') => void;
 }
 
 export const LobbyScreen: React.FC<Props> = ({ onJoin }) => {
   const [name, setName] = useState('');
   const [roomId, setRoomId] = useState('');
-  const [selectedShop, setSelectedShop] = useState<Shop | null>(null); // 選んだ店
   const [mode, setMode] = useState<'SELECT' | 'CREATE' | 'JOIN'>('SELECT');
 
   const handleStart = (role: 'HOST' | 'GUEST') => {
     if (!name || !roomId) return;
-    onJoin(name, roomId, role, selectedShop);
+    onJoin(name, roomId, role);
   };
 
   return (
     <div className="card">
-      <h1 className="title">通信対戦</h1>
-      <p className="subtitle">勝者が今夜のお店を決める！</p>
+      <h1 className="title">瞬間色あて</h1>
+      <p className="subtitle">部屋に入って対戦！</p>
 
       {mode === 'SELECT' && (
         <div className="space-y-4">
@@ -62,22 +60,13 @@ export const LobbyScreen: React.FC<Props> = ({ onJoin }) => {
             />
           </div>
 
-          {/* お店検索コンポーネントを表示 */}
-          <ShopSearch onSelect={(shop) => setSelectedShop(shop)} />
-
-          {selectedShop && (
-             <div className="bg-orange-100 p-2 rounded text-orange-800 text-sm font-bold border border-orange-200">
-               選択中: {selectedShop.name}
-             </div>
-          )}
-
           <button 
             className="btn btn-primary" 
             onClick={() => handleStart(mode === 'CREATE' ? 'HOST' : 'GUEST')}
             disabled={!name || !roomId}
             style={{ opacity: (!name || !roomId) ? 0.5 : 1 }}
           >
-            {mode === 'CREATE' ? '部屋を作成' : '部屋に参加'}
+            {mode === 'CREATE' ? '準備完了' : '参加する'}
           </button>
 
           <button className="btn btn-secondary" onClick={() => setMode('SELECT')}>
