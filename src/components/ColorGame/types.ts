@@ -1,6 +1,6 @@
 export type GameState = 'LOBBY' | 'WAITING' | 'PLAY' | 'GAME_OVER';
 export type QuestionType = 'TEXT' | 'COLOR';
-export type PlayerRole = 'HOST' | 'GUEST';
+export type PlayerRole = 'HOST' | 'GUEST'; 
 
 export type ColorDefinition = {
   id: string;
@@ -8,7 +8,7 @@ export type ColorDefinition = {
   hex: string;
 };
 
-export interface Question {
+export interface Question { 
   text: ColorDefinition;
   color: ColorDefinition;
   type: QuestionType;
@@ -40,4 +40,4 @@ export interface RoomData {
   shopCandidates: Shop[];
   winnerSelectionId: string | null;
   startTime?: number; 
-}　
+}
