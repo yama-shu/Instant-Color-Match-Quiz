@@ -1,43 +1,75 @@
 import React from 'react';
-import { RotateCcw, AlertCircle } from 'lucide-react';
-import './ColorGame.css';
+import { RotateCcw, Home, Trophy } from 'lucide-react';
 
 interface Props {
   score: number;
   highScore: number;
   onRestart: () => void;
   onHome: () => void;
+  // 追加: 文字を変えられるようにする（? は省略可能という意味）
+  title?: string;
+  subtitle?: string;
 }
 
-export const GameOverScreen: React.FC<Props> = ({ score, highScore, onRestart, onHome }) => {
-  const isNewRecord = score >= highScore && score > 0;
-
+export const GameOverScreen: React.FC<Props> = ({ 
+  score, 
+  highScore, 
+  onRestart, 
+  onHome,
+  // デフォルト値を設定（指定がない場合はこれらが表示されます）
+  title = "GAME OVER",
+  subtitle = "集中力が途切れました..."
+}) => {
   return (
-    <div className="card">
-      <div style={{ color: '#ef4444', display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
-        <AlertCircle size={64} />
+    <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-sm text-center animate-in zoom-in duration-300">
+      
+      {/* アイコン部分 */}
+      <div className="flex justify-center mb-4">
+        <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+           <span className="text-3xl font-black">!</span>
+        </div>
       </div>
-      <h2 className="title" style={{ fontSize: '1.8rem', color: '#1e293b' }}>GAME OVER</h2>
-      <p className="subtitle">集中力が途切れました...</p>
+      
+      {/* タイトル（変更可能） */}
+      <h2 className="text-3xl font-black text-slate-800 mb-2">
+        {title}
+      </h2>
+      
+      {/* サブタイトル（空文字の場合は表示しない） */}
+      {subtitle && (
+        <p className="text-slate-400 font-bold mb-6">
+          {subtitle}
+        </p>
+      )}
 
-      <div style={{ background: '#f8fafc', padding: '1.5rem', borderRadius: '1rem', marginBottom: '2rem' }}>
-        <p className="info-label">Final Score</p>
-        <p style={{ fontSize: '3rem', fontWeight: '900', color: '#4f46e5', lineHeight: 1 }}>{score}</p>
+      {/* スコア表示 */}
+      <div className="bg-slate-50 p-4 rounded-2xl mb-6">
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Final Score</p>
+        <p className="text-5xl font-black text-indigo-600 tabular-nums">{score}</p>
       </div>
 
-      {isNewRecord && (
-        <div className="bg-yellow pulse" style={{ fontWeight: 'bold' }}>
-          🎉 New High Score! 🎉
+      {/* ハイスコア更新演出（ハイスコアが0より大きく、かつ今回のスコアがそれ以上の時） */}
+      {highScore > 0 && score >= highScore && (
+        <div className="bg-yellow-100 text-yellow-700 py-2 px-4 rounded-xl font-bold mb-6 flex items-center justify-center gap-2 animate-bounce">
+          <Trophy size={16} /> New High Score! 🎉
         </div>
       )}
 
-      <button className="btn btn-primary" onClick={onRestart}>
-        <RotateCcw size={24} /> もう一度挑戦
-      </button>
-
-      <button className="btn btn-secondary" onClick={onHome}>
-        トップに戻る
-      </button>
+      {/* ボタン */}
+      <div className="space-y-3">
+        <button 
+          onClick={onRestart}
+          className="w-full py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-md hover:bg-indigo-700 active:scale-95 transition-transform flex items-center justify-center gap-2"
+        >
+          <RotateCcw size={20} /> もう一度挑戦
+        </button>
+        <button 
+          onClick={onHome}
+          className="w-full py-3 bg-white text-slate-500 border-2 border-slate-100 rounded-xl font-bold hover:bg-slate-50 active:scale-95 transition-transform flex items-center justify-center gap-2"
+        >
+          <Home size={20} /> トップに戻る
+        </button>
+      </div>
     </div>
   );
 };

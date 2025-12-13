@@ -1,28 +1,38 @@
 import React, { useState } from 'react';
 import { Users, LogIn } from 'lucide-react';
+import type { PlayerRole } from './types'; // 修正: 型をインポート
 import './ColorGame.css';
 
 interface Props {
-  // お店は親から渡されるので、ここでの引数からは削除（または無視）でもOKですが
-  // わかりやすくシンプルにします
-  onJoin: (name: string, roomId: string, role: 'HOST' | 'GUEST') => void;
+  onJoin: (name: string, roomId: string, role: PlayerRole) => void;
+  title?: string; // タイトルを受け取る
 }
 
-export const LobbyScreen: React.FC<Props> = ({ onJoin }) => {
+// 内部の画面遷移用ステートの型
+type LobbyMode = 'SELECT' | 'CREATE' | 'JOIN';
+
+export const LobbyScreen: React.FC<Props> = ({ onJoin, title = '瞬間色あて' }) => {
   const [name, setName] = useState('');
   const [roomId, setRoomId] = useState('');
-  const [mode, setMode] = useState<'SELECT' | 'CREATE' | 'JOIN'>('SELECT');
+  // 修正: 初期値を 'SELECT' にし、型を正しく定義
+  const [mode, setMode] = useState<LobbyMode>('SELECT');
 
-  const handleStart = (role: 'HOST' | 'GUEST') => {
+  const handleStart = () => {
     if (!name || !roomId) return;
+    // モードに応じて役割を決定
+    const role = mode === 'CREATE' ? 'HOST' : 'GUEST';
     onJoin(name, roomId, role);
   };
 
   return (
-    <div className="card">
-      <h1 className="title">瞬間色あて</h1>
-      <p className="subtitle">部屋に入って対戦！</p>
+    <div className="card w-full max-w-md bg-white p-8 rounded-3xl shadow-xl">
+      {/* タイトル表示 */}
+      <h1 className="text-3xl font-black text-center text-indigo-600 mb-2">
+        {title}
+      </h1>
+      <p className="text-center text-slate-400 font-bold mb-8">部屋に入って対戦！</p>
 
+      {/* 1. 選択画面 */}
       {mode === 'SELECT' && (
         <div className="space-y-4">
           <button className="btn btn-primary" onClick={() => setMode('CREATE')}>
@@ -34,6 +44,7 @@ export const LobbyScreen: React.FC<Props> = ({ onJoin }) => {
         </div>
       )}
 
+      {/* 2. 入力画面（作成 または 参加） */}
       {(mode === 'CREATE' || mode === 'JOIN') && (
         <div className="flex flex-col gap-4">
           <div>
@@ -62,7 +73,7 @@ export const LobbyScreen: React.FC<Props> = ({ onJoin }) => {
 
           <button 
             className="btn btn-primary" 
-            onClick={() => handleStart(mode === 'CREATE' ? 'HOST' : 'GUEST')}
+            onClick={handleStart}
             disabled={!name || !roomId}
             style={{ opacity: (!name || !roomId) ? 0.5 : 1 }}
           >
