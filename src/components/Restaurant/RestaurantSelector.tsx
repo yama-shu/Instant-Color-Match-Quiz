@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Search, MapPin, Store, Utensils } from 'lucide-react';
-import { SkipToGameButton } from '../NavigationButtons'; // 新しいボタン
+import { SkipToGameButton } from '../NavigationButtons';
 
+// コンフリクト回避のため、ここに直接型定義を書きます
 export interface Shop {
   id: string;
   name: string;
@@ -26,7 +27,7 @@ const GENRES = [
 
 interface Props {
   onConfirm: (shop: Shop) => void;
-  onSkip: () => void; // 追加: スキップ機能を受け取る
+  onSkip: () => void;
 }
 
 export const RestaurantSelector: React.FC<Props> = ({ onConfirm, onSkip }) => {
@@ -143,25 +144,32 @@ export const RestaurantSelector: React.FC<Props> = ({ onConfirm, onSkip }) => {
         <SkipToGameButton onSkip={onSkip} />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
-        {shops.map((shop) => (
-          <div key={shop.id} className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex gap-4">
-            <img src={shop.photoUrl} alt={shop.name} className="w-24 h-24 object-cover rounded-lg bg-slate-200" />
-            <div className="flex-1 flex flex-col justify-between">
-              <div>
-                <p className="text-xs text-orange-500 font-bold mb-1">{shop.genre}</p>
-                <h3 className="font-bold text-slate-800 leading-tight mb-1">{shop.name}</h3>
-                <p className="text-xs text-slate-400 line-clamp-1">{shop.address}</p>
+      <div className="flex-1 overflow-y-auto p-4">
+        {/* 変更箇所: Gridレイアウト (スマホ2列 / PC4列) */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pb-20">
+          {shops.map((shop) => (
+            <div key={shop.id} className="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col h-full">
+              {/* 画像を上に配置 */}
+              <img src={shop.photoUrl} alt={shop.name} className="w-full h-32 object-cover rounded-lg mb-2 bg-slate-200" />
+              
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <p className="text-xs text-orange-500 font-bold mb-1">{shop.genre}</p>
+                  <h3 className="font-bold text-slate-800 leading-tight mb-1 text-sm line-clamp-2">{shop.name}</h3>
+                  <p className="text-xs text-slate-400 line-clamp-1">{shop.address}</p>
+                </div>
+                
+                <button 
+                  onClick={() => onConfirm(shop)}
+                  className="mt-3 w-full bg-slate-800 text-white py-2 rounded-lg text-xs font-bold hover:bg-slate-700"
+                >
+                  このお店にする
+                </button>
               </div>
-              <button 
-                onClick={() => onConfirm(shop)}
-                className="mt-2 w-full bg-slate-800 text-white py-2 rounded-lg text-sm font-bold hover:bg-slate-700"
-              >
-                このお店にする
-              </button>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
+
         {!loading && searched && shops.length === 0 && (
           <div className="text-center text-slate-400 mt-10">
             <p>お店が見つかりませんでした。</p>
