@@ -1,64 +1,81 @@
 import { useState } from 'react';
 import { Home } from './components/Home';
-import { RestaurantSelector } from './components/Restaurant/RestaurantSelector';
+import { RestaurantSelector, type Shop } from './components/Restaurant/RestaurantSelector';
 import { GameSelector } from './components/Games/GameSelector';
-import ColorGame from './components/Games/ColorGame/ColorGame';
-import type { Shop } from './types';
+import { ColorGame } from './components/Games/ColorGame/ColorGame';
 
-// アプリのフェーズ管理
-type AppPhase = 'HOME' | 'RESTAURANT_SELECT' | 'GAME_SELECT' | 'PLAYING';
+type Phase = 'START' | 'RESTAURANT_SELECT' | 'GAME_SELECT' | 'PLAY';
+type GameType = 'COLOR' | 'CLICKER';
 
 function App() {
-  const [phase, setPhase] = useState<AppPhase>('HOME');
+  const [phase, setPhase] = useState<Phase>('START');
   const [selectedShop, setSelectedShop] = useState<Shop | null>(null);
-  const [selectedGameId, setSelectedGameId] = useState<'COLOR' | 'CLICKER'>('COLOR');
+  const [selectedGame, setSelectedGame] = useState<GameType | null>(null);
 
-  // 1. ホーム画面
-  if (phase === 'HOME') {
-    return <Home onStart={() => setPhase('RESTAURANT_SELECT')} />;
-  }
+  // ゲーム終了時の処理
+  const handleGameEnd = () => {
+    setPhase('GAME_SELECT');
+  };
 
-  // 2. お店選択画面
-  if (phase === 'RESTAURANT_SELECT') {
-    return (
-      <RestaurantSelector 
-        onConfirm={(shop) => {
-          setSelectedShop(shop);
-          setPhase('GAME_SELECT');
-        }} 
-      />
-    );
-  }
+  return (
+    <div className="w-full h-full min-h-screen bg-slate-50">
+      
+      {/* 1. スタート画面 */}
+      {phase === 'START' && (
+        <Home onStart={() => setPhase('RESTAURANT_SELECT')} />
+      )}
 
-  // 3. ゲーム選択画面
-  if (phase === 'GAME_SELECT') {
-    return (
-      <GameSelector 
-        onSelect={(gameId) => {
-          setSelectedGameId(gameId);
-          setPhase('PLAYING');
-        }} 
-      />
-    );
-  }
+      {/* 2. 飲食店選択画面 */}
+      {phase === 'RESTAURANT_SELECT' && (
+        <RestaurantSelector 
+          onConfirm={(shop) => {
+            setSelectedShop(shop); 
+            setPhase('GAME_SELECT'); 
+          }}
+          onSkip={() => {
+            setSelectedShop(null); 
+            setPhase('GAME_SELECT'); 
+          }}
+        />
+      )}
 
-  // 4. ゲームプレイ画面（ロビー含む）
-  if (phase === 'PLAYING') {
-    // 選択されたゲームIDに応じてコンポーネントを切り替える
-    if (selectedGameId === 'COLOR') {
-      return (
+      {/* 3. ゲーム選択画面 */}
+      {phase === 'GAME_SELECT' && (
+        <GameSelector 
+          onSelect={(gameId) => {
+            setSelectedGame(gameId);
+            setPhase('PLAY'); 
+          }}
+          onBack={() => {
+            setPhase('RESTAURANT_SELECT'); 
+          }}
+        />
+      )}
+
+      {/* 4. ゲームプレイ画面 */}
+      {phase === 'PLAY' && selectedGame === 'COLOR' && (
         <ColorGame 
           shop={selectedShop} 
-          onBack={() => setPhase('GAME_SELECT')} 
+          onGameEnd={handleGameEnd} 
         />
-      );
-    }
-    
-    // 他のゲームがあればここに追加...
-    return <div>Game Not Found</div>;
-  }
+      )}
 
-  return null;
+      {/* 他のゲームが選ばれた場合の仮表示 */}
+      {phase === 'PLAY' && selectedGame === 'CLICKER' && (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <h2 className="text-2xl font-bold mb-4">連打バトル(仮)</h2>
+          <p className="mb-4">このゲームはまだ準備中です。</p>
+          <button 
+            onClick={() => setPhase('GAME_SELECT')}
+            className="px-6 py-2 bg-slate-500 text-white rounded-lg"
+          >
+            戻る
+          </button>
+        </div>
+      )}
+
+    </div>
+  );
 }
 
 export default App;

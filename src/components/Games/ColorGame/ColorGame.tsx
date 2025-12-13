@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { db } from '../../../firebase'; // 階層が変わったのでパスを修正
+import { db } from '../../../firebase'; 
 import { ref, set, onValue, update, get } from 'firebase/database';
 
 import { COLORS, GAME_DURATION, TIME_BONUS } from './constants';
-import type { Shop } from '../../../types'; // 共通の型定義からShopをインポート
+// ↓パスなどはあなたのコードをそのまま採用しています
+import type { Shop } from '../../../types'; 
 import type { GameState, Question, QuestionType, PlayerRole, RoomData, Player } from './types';
 import { PlayScreen } from './PlayScreen';
 import { GameOverScreen } from './GameOverScreen';
@@ -13,8 +14,8 @@ import './ColorGame.css';
 
 // --- Props定義 ---
 interface Props {
-  shop: Shop | null; // App.tsxから渡される「選んだお店」
-  onBack: () => void; // 「ゲーム選択」に戻るための関数
+  shop: Shop | null;
+  onGameEnd: () => void; // 修正: App.tsxに合わせて 'onBack' を 'onGameEnd' に変更
 }
 
 // --- ユーティリティ ---
@@ -29,7 +30,8 @@ const generateQuestion = (): Question => {
 };
 
 // --- メインコンポーネント ---
-const ColorGame: React.FC<Props> = ({ shop, onBack }) => {
+// 修正: export const に変更し、受け取るPropsを onGameEnd に変更
+export const ColorGame: React.FC<Props> = ({ shop, onGameEnd }) => {
   // Game State
   const [gameState, setGameState] = useState<GameState>('LOBBY');
   const [myRole, setMyRole] = useState<PlayerRole | null>(null);
@@ -226,11 +228,8 @@ const ColorGame: React.FC<Props> = ({ shop, onBack }) => {
     const isWin = score > opponentScore;
     
     if (isWin) {
-      // 自分が勝ったら自分の選んだ店
       return shop;
     } else {
-      // 負けたら相手の店（候補リストから自分の店以外を探す簡易ロジック）
-      // ※より厳密には相手のselectedShopIdを使うべきですが、今回はこれで十分機能します
       return shopCandidates.find(s => s.id !== shop?.id) || null;
     }
   };
@@ -240,9 +239,9 @@ const ColorGame: React.FC<Props> = ({ shop, onBack }) => {
   if (gameState === 'LOBBY') {
     return (
       <div className="game-container">
-        {/* 戻るボタンを追加 */}
+        {/* 戻るボタン: onBack -> onGameEnd に修正 */}
         <button 
-          onClick={onBack}
+          onClick={onGameEnd}
           className="fixed top-4 left-4 z-50 text-slate-400 font-bold hover:text-slate-600 bg-white/80 px-3 py-1 rounded-full shadow-sm"
         >
           ← ゲーム選択へ
@@ -292,7 +291,7 @@ const ColorGame: React.FC<Props> = ({ shop, onBack }) => {
           score={score} 
           highScore={0} 
           onRestart={() => setGameState('LOBBY')} 
-          onHome={onBack} // ホームに戻るボタンでメニューへ
+          onHome={onGameEnd} // 修正: onBack -> onGameEnd
         />
         
         <div className="card" style={{ marginTop: '1rem' }}>
@@ -352,5 +351,3 @@ const ColorGame: React.FC<Props> = ({ shop, onBack }) => {
     </div>
   );
 };
-
-export default ColorGame;
