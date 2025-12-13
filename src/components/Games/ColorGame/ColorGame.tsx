@@ -239,14 +239,14 @@ export const ColorGame: React.FC<Props> = ({ shop, onGameEnd }) => {
   if (gameState === 'LOBBY') {
     return (
       <div className="game-container">
-        {/* 戻るボタン: onBack -> onGameEnd に修正 */}
         <button 
           onClick={onGameEnd}
           className="fixed top-4 left-4 z-50 text-slate-400 font-bold hover:text-slate-600 bg-white/80 px-3 py-1 rounded-full shadow-sm"
         >
           ← ゲーム選択へ
         </button>
-        <LobbyScreen onJoin={joinRoom} />
+        {/* titleを指定 */}
+        <LobbyScreen onJoin={joinRoom} title="瞬間色あて" />
       </div>
     );
   }

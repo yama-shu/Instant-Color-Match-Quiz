@@ -19,7 +19,7 @@ export const GameSelector: React.FC<Props> = ({ onSelect, onBack }) => {
     },
     { 
       id: 'CLICKER', 
-      name: '連打バトル(仮)', 
+      name: '連打バトル', 
       desc: '指の体力を競う！', 
       icon: <Dumbbell size={40} className="text-white" />,
       color: 'bg-orange-500' 

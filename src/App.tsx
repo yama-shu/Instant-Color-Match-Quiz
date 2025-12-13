@@ -3,6 +3,7 @@ import { Home } from './components/Home';
 import { RestaurantSelector, type Shop } from './components/Restaurant/RestaurantSelector';
 import { GameSelector } from './components/Games/GameSelector';
 import { ColorGame } from './components/Games/ColorGame/ColorGame';
+import { ClickerGame } from './components/Games/ClickerGame/ClickerGame';
 
 type Phase = 'START' | 'RESTAURANT_SELECT' | 'GAME_SELECT' | 'PLAY';
 type GameType = 'COLOR' | 'CLICKER';
@@ -60,20 +61,12 @@ function App() {
         />
       )}
 
-      {/* 他のゲームが選ばれた場合の仮表示 */}
       {phase === 'PLAY' && selectedGame === 'CLICKER' && (
-        <div className="flex flex-col items-center justify-center h-screen">
-          <h2 className="text-2xl font-bold mb-4">連打バトル(仮)</h2>
-          <p className="mb-4">このゲームはまだ準備中です。</p>
-          <button 
-            onClick={() => setPhase('GAME_SELECT')}
-            className="px-6 py-2 bg-slate-500 text-white rounded-lg"
-          >
-            戻る
-          </button>
-        </div>
-      )}
-
+        <ClickerGame 
+          shop={selectedShop} 
+          onGameEnd={handleGameEnd} 
+        />
+      )}    
     </div>
   );
 }
