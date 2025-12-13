@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Home } from './components/Home';
 import { RestaurantSelector, type Shop } from './components/Restaurant/RestaurantSelector';
 import { GameSelector } from './components/Games/GameSelector';
