@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Users, LogIn } from 'lucide-react';
-import type { PlayerRole } from './types'; // 修正: 型をインポート
+import type { PlayerRole } from './types'; 
 import './ColorGame.css';
 
 interface Props {
