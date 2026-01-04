@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Users, LogIn } from 'lucide-react';
-import type { PlayerRole } from './types'; // 修正: 型をインポート
+import { Users, LogIn, User } from 'lucide-react';
+import type { PlayerRole } from './types'; 
 import './ColorGame.css';
 
 interface Props {
@@ -35,6 +35,21 @@ export const LobbyScreen: React.FC<Props> = ({ onJoin, title = '瞬間色あて'
       {/* 1. 選択画面 */}
       {mode === 'SELECT' && (
         <div className="space-y-4">
+          <div className="relative">
+            <button 
+              disabled 
+              className="btn w-full bg-slate-100 text-slate-400 border-2 border-slate-200 cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              <User size={24} /> ひとりで遊ぶ (CPU戦)
+            </button>
+            
+            {/* 準備中バッジ */}
+            <span className="absolute -top-2 -right-2 bg-yellow-400 text-slate-800 text-xs font-bold px-2 py-1 rounded-full shadow-sm transform rotate-12 border border-white">
+              準備中
+            </span>
+          </div>
+
+          <div className="border-t border-slate-100 my-2"></div>
           <button className="btn btn-primary" onClick={() => setMode('CREATE')}>
             <Users size={24} /> 部屋を作る (ホスト)
           </button>
