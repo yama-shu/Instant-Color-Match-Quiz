@@ -66,7 +66,7 @@ export const PlayScreen: React.FC<Props> = ({ score, timeLeft, combo, question, 
           <button
             key={c.id}
             className="btn btn-answer"
-            // ここで背景色を動的にセットします
+            // 背景色を動的にセット
             style={{ 
               backgroundColor: c.hex, 
               color: 'white', // 文字は白にする

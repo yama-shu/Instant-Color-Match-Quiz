@@ -19,26 +19,25 @@ interface Props {
 }
 
 export const ClickerGame: React.FC<Props> = ({ shop, onGameEnd }) => {
-  // State
+  // --- ゲーム状態管理 ---
   const [gameState, setGameState] = useState<GameState>('LOBBY');
   const [myRole, setMyRole] = useState<PlayerRole | null>(null);
   const [roomId, setRoomId] = useState('');
   const [myName, setMyName] = useState('');
 
-  // Game Data
+  // --- 自分のデータ ---
   const [clicks, setClicks] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [startCount, setStartCount] = useState(3); // 開始前のカウントダウン用
 
-  // Opponent Data
+  // --- 相手のデータ ---
   const [opponentName, setOpponentName] = useState('');
   const [opponentScore, setOpponentScore] = useState(0);
 
-  // Shop Data
+  // --- 店舗データ ---
   const [shopCandidates, setShopCandidates] = useState<Shop[]>([]);
 
-  // --- Firebase Logic ---
-
+  // --- Firebase連携 ---
   const joinRoom = async (name: string, id: string, role: PlayerRole) => {
     setMyName(name);
     setRoomId(id);
@@ -107,7 +106,7 @@ export const ClickerGame: React.FC<Props> = ({ shop, onGameEnd }) => {
     });
   };
 
-  // --- Game Logic ---
+  // --- ゲームロジック ---
 
   const handleHostStartGame = () => {
     if (roomId) update(ref(db, `rooms/${roomId}`), { status: 'PLAY' });
@@ -166,7 +165,7 @@ export const ClickerGame: React.FC<Props> = ({ shop, onGameEnd }) => {
     return shopCandidates.find(s => s.id !== shop?.id) || null;
   };
 
-  // --- Render ---
+  // --- レンダリング ---
 
   if (gameState === 'LOBBY') {
     return (

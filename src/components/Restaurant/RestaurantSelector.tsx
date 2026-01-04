@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Search, MapPin, Store, Utensils } from 'lucide-react';
 import { SkipToGameButton } from '../NavigationButtons';
 
-// コンフリクト回避のため、ここに直接型定義を書きます
 export interface Shop {
   id: string;
   name: string;

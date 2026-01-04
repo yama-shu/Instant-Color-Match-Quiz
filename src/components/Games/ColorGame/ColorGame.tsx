@@ -3,7 +3,6 @@ import { db } from '../../../firebase';
 import { ref, set, onValue, update, get } from 'firebase/database';
 
 import { COLORS, GAME_DURATION, TIME_BONUS } from './constants';
-// ↓パスなどはあなたのコードをそのまま採用しています
 import type { Shop } from '../../../types'; 
 import type { GameState, Question, QuestionType, PlayerRole, RoomData, Player } from './types';
 import { PlayScreen } from './PlayScreen';
@@ -30,7 +29,7 @@ const generateQuestion = (): Question => {
 };
 
 // --- メインコンポーネント ---
-// 修正: export const に変更し、受け取るPropsを onGameEnd に変更
+// ColorGameコンポーネント
 export const ColorGame: React.FC<Props> = ({ shop, onGameEnd }) => {
   // Game State
   const [gameState, setGameState] = useState<GameState>('LOBBY');
@@ -38,21 +37,20 @@ export const ColorGame: React.FC<Props> = ({ shop, onGameEnd }) => {
   const [roomId, setRoomId] = useState('');
   const [myName, setMyName] = useState('');
   
-  // Play Data
+  // 自分の情報
   const [score, setScore] = useState(0);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [question, setQuestion] = useState<Question | null>(null);
   const [combo, setCombo] = useState(0);
 
-  // Opponent Data
+  // 相手の情報
   const [opponentName, setOpponentName] = useState('');
   const [opponentScore, setOpponentScore] = useState(0);
   const [opponentAlive, setOpponentAlive] = useState(true);
   
-  // Shop Data
   const [shopCandidates, setShopCandidates] = useState<Shop[]>([]);
 
-  // --- Firebase Logic ---
+  // --- Firebase連携 ---
 
   // 1. 部屋に参加 / 作成
   const joinRoom = async (name: string, id: string, role: PlayerRole) => {
@@ -154,7 +152,7 @@ export const ColorGame: React.FC<Props> = ({ shop, onGameEnd }) => {
     });
   };
 
-  // --- Game Logic ---
+  // --- ゲームロジック ---
 
   const startGameLocal = () => {
     setScore(0);
@@ -233,8 +231,7 @@ export const ColorGame: React.FC<Props> = ({ shop, onGameEnd }) => {
       return shopCandidates.find(s => s.id !== shop?.id) || null;
     }
   };
-
-  // --- Render ---
+  // --- レンダリング ---
 
   if (gameState === 'LOBBY') {
     return (

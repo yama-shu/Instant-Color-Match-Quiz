@@ -1,7 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'http'; 
 import fetch from 'node-fetch'; 
 
-// ... (ShopResultなどの型定義は同じ)
 interface ShopResult {
   results: {
     shop: any[]; 
@@ -21,7 +20,7 @@ export default async (request: IncomingMessage, response: ServerResponse) => {
   const keyword = url.searchParams.get('keyword');
   const lat = url.searchParams.get('lat');
   const lng = url.searchParams.get('lng');
-  const genre = url.searchParams.get('genre'); // ★これが必要です！
+  const genre = url.searchParams.get('genre'); 
   const range = url.searchParams.get('range') || '3'; 
   const count = url.searchParams.get('count') || '20';
 

@@ -15,7 +15,7 @@ export const ShopSearch: React.FC<Props> = ({ onSelect }) => {
     if (!keyword) return;
     setLoading(true);
     try {
-      // あなたが作ったAPIを呼び出す
+      // APIを呼び出す
       const res = await fetch(`/api/shops?keyword=${encodeURIComponent(keyword)}&count=5`);
       const data = await res.json();
       if (data.shops) {

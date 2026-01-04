@@ -6,7 +6,6 @@ interface Props {
   highScore: number;
   onRestart: () => void;
   onHome: () => void;
-  // 追加: 文字を変えられるようにする（? は省略可能という意味）
   title?: string;
   subtitle?: string;
 }
@@ -16,7 +15,7 @@ export const GameOverScreen: React.FC<Props> = ({
   highScore, 
   onRestart, 
   onHome,
-  // デフォルト値を設定（指定がない場合はこれらが表示されます）
+  // デフォルト値を設定
   title = "GAME OVER",
   subtitle = "集中力が途切れました..."
 }) => {
